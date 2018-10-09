@@ -1,9 +1,9 @@
-# client_waves
+# client
 
-Клиент для работы с ассетом "МИР" в сети Waves
+Клиент для работы с ассетом "МИР" в сети MIR
 </br>
 <p align="center">
-  <img src="https://github.com/mir-one/client_waves/blob/master/wallet.png">
+  <img src="https://github.com/mir-one/client/blob/master/client.png">
 </p>
 
 * Загрузите и распакуйте zip в любой каталог
