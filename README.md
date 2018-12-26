@@ -3,7 +3,7 @@
 Клиент для работы с ассетом "МИР" в сети MIR
 </br>
 <p align="center">
-  <img src="https://github.com/mir-one/client/blob/master/client.png">
+  <img src="client.png">
 </p>
 
 * Загрузите и распакуйте zip в любой каталог
