@@ -1440,23 +1440,8 @@
 			 */
 			this.platformCurrencyCode = function (currency) {
 				switch (currency.id) {
-					case Currency.BTC.id:
-						return 'WBTC';
-
 					case Currency.MIR.id:
 						return 'MIR';
-
-					case Currency.ETH.id:
-						return 'WETH';
-
-					case Currency.LTC.id:
-						return 'WLTC';
-
-					case Currency.ZEC.id:
-						return 'WZEC';
-
-					case Currency.BCH.id:
-						return 'WBCH';
 				}
 
 				unsupportedCurrency(currency);
@@ -1469,23 +1454,8 @@
 			 */
 			this.gatewayCurrencyCode = function (currency) {
 				switch (currency.id) {
-					case Currency.BTC.id:
-						return 'BTC';
-
 					case Currency.MIR.id:
 						return 'MIR';
-
-					case Currency.ETH.id:
-						return 'ETH';
-
-					case Currency.LTC.id:
-						return 'LTC';
-
-					case Currency.ZEC.id:
-						return 'ZEC';
-
-					case Currency.BCH.id:
-						return 'BCH';
 				}
 
 				unsupportedCurrency(currency);

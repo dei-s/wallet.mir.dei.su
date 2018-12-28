@@ -47,14 +47,11 @@
 
             this.testnetSubstitutePair = function (pair) {
                 var realIds = {};
-                realIds[Currency.BTC.id] = '8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS';
-                realIds[Currency.USD.id] = 'Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck';
-                realIds[Currency.EUR.id] = 'Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU';
-                realIds[Currency.CNY.id] = 'DEJbZipbKQjwEiRjx2AqQFucrj5CZ3rAc4ZvFM8nAsoA';
+                realIds[Currency.LBR.id] = '55WhEqBaGb6Z9DK3bHJQkk4jEDwRejc1xJttyxiykMnL';
 
                 return {
                     amountAsset: {id: realIds[pair.amountAsset.id] || ''},
-                    priceAsset: {id: realIds[pair.priceAsset.id] || realIds[Currency.BTC.id]}
+                    priceAsset: {id: realIds[pair.priceAsset.id] || realIds[Currency.LBR.id]}
                 };
             };
         }]);
@@ -260,12 +257,7 @@
     // TODO : move to the future `appState` service.
 
     var predefinedAssets = [
-        Currency.BTC,
-        Currency.USD,
-        Currency.EUR,
-        Currency.CNY,
-        Currency.WCT,
-        Currency.MRT
+        Currency.LBR
     ];
 
     angular
@@ -2327,42 +2319,6 @@
             image: 'wB-bg-MIR.svg',
             displayName: Currency.MIR.displayName
         };
-        mapping[Currency.BTC.displayName] = {
-            image: 'wB-bg-BTC.svg',
-            displayName: Currency.BTC.displayName
-        };
-        mapping[Currency.USD.displayName] = {
-            image: 'wB-bg-USD.svg',
-            displayName: Currency.USD.displayName
-        };
-        mapping[Currency.EUR.displayName] = {
-            image: 'wB-bg-EUR.svg',
-            displayName: Currency.EUR.displayName
-        };
-        mapping[Currency.ETH.displayName] = {
-            image: 'wB-bg-ETH.svg',
-            displayName: Currency.ETH.displayName
-        };
-        mapping[Currency.LTC.displayName] = {
-            image: 'wB-bg-LTC.svg',
-            displayName: Currency.LTC.displayName
-        };
-        mapping[Currency.ZEC.displayName] = {
-            image: 'wB-bg-ZEC.svg',
-            displayName: Currency.ZEC.displayName
-        };
-        mapping[Currency.TRY.displayName] = {
-            image: 'wB-bg-WTRY.png',
-            displayName: Currency.TRY.displayName
-        };
-        mapping[Currency.BCH.displayName] = {
-            image: 'wB-bg-BCH.svg',
-            displayName: 'BCH'
-        };
-				mapping[Currency.PROTON.displayName] = {
-            image: 'wB-bg-PROTON.svg',
-            displayName: Currency.PROTON.displayName
-        };
 
         ctrl.$onChanges = function (changesObject) {
             if (changesObject.balance) {
@@ -2424,11 +2380,7 @@
         ctrl.wallets = [
             {
                 balance: new Money(0, Currency.MIR),
-                depositWith: Currency.BTC
-            },
-						{
-                balance: new Money(0, Currency.PROTON),
-                depositWith: Currency.BTC
+                depositWith: Currency.LBR
             }
         ];
 
@@ -2456,13 +2408,7 @@
             var id = wallet.balance.currency.id,
                 type;
 
-            if (id === Currency.BTC.id ||
-                id === Currency.ETH.id ||
-                id === Currency.MIR.id ||
-                id === Currency.LTC.id ||
-                id === Currency.ZEC.id ||
-                id === Currency.BCH.id
-            ) {
+            if (id === Currency.LBR.id) {
                 type = 'crypto';
             } else if (id === Currency.EUR.id || id === Currency.USD.id) {
                 type = 'fiat';
@@ -2552,12 +2498,7 @@
         // Assets ID substitution for testnet
         function patchCurrencyIdsForTestnet() {
             if ($scope.isTestnet()) {
-                Currency.EUR.id = '2xnE3EdpqXtFgCP156qt1AbyjpqdZ5jGjWo3CwTawcux';
-                Currency.USD.id = 'HyFJ3rrq5m7FxdkWtQXkZrDat1F7LjVVGfpSkUuEXQHj';
-                Currency.BTC.id = 'Fmg13HEHJHuZYbtJq8Da8wifJENq8uBxDuWoP9pVe2Qe';
-                Currency.ETH.id = '3fVdr1oiX39uS82ZGUPnu7atNQtFHZfPnseRDUcDxrhp';
-                Currency.LTC.id = 'NO_ID_YET'; // FIXME
-                Currency.ZEC.id = 'NO_ID_YET'; // FIXME
+                Currency.LBR.id = 'Fmg13HEHJHuZYbtJq8Da8wifJENq8uBxDuWoP9pVe2Qe';
                 Currency.invalidateCache();
             }
         }
@@ -2839,17 +2780,8 @@
             ctrl.assetBalance = eventData.assetBalance;
             ctrl.wavesBalance = eventData.wavesBalance;
 
-            if (ctrl.assetBalance.currency === Currency.BTC ||
-                ctrl.assetBalance.currency === Currency.ETH ||
-                ctrl.assetBalance.currency === Currency.LTC ||
-                ctrl.assetBalance.currency === Currency.ZEC ||
-                ctrl.assetBalance.currency === Currency.BCH
-            ) {
+            if (ctrl.assetBalance.currency === Currency.LBR) {
                 withdrawCrypto();
-            } else if (ctrl.assetBalance.currency === Currency.EUR) {
-                withdrawEUR();
-            } else if (ctrl.assetBalance.currency === Currency.USD) {
-                withdrawUSD();
             } else {
                 $scope.home.featureUnderDevelopment();
             }
@@ -2896,26 +2828,16 @@
                     notificationService.error(DEFAULT_ERROR_MESSAGE);
                 }
             }).then(function () {
-                return coinomatService.getDepositDetails(Currency.BTC, Currency.BTC,
+                return coinomatService.getDepositDetails(Currency.LBR, Currency.LBR,
                     applicationContext.account.address);
             }).then(function (depositDetails) {
                 notPermittedBitcoinAddresses[depositDetails.address] = 1;
 
-                return coinomatService.getDepositDetails(Currency.BTC, Currency.MIR,
+                return coinomatService.getDepositDetails(Currency.LBR, Currency.MIR,
                     applicationContext.account.address);
             }).then(function (depositDetails) {
                 notPermittedBitcoinAddresses[depositDetails.address] = 1;
             });
-        }
-
-        function withdrawEUR() {
-            ctrl.sourceCurrency = Currency.EUR.displayName;
-            dialogService.open('#withdraw-fiat-dialog');
-        }
-
-        function withdrawUSD() {
-            ctrl.sourceCurrency = Currency.USD.displayName;
-            dialogService.open('#withdraw-fiat-dialog');
         }
 
         function validateRecipientBTCAddress(recipient) {
@@ -2942,10 +2864,8 @@
             try {
                 var withdrawCost = Money.fromTokens(ctrl.autocomplete.getFeeAmount(), Currency.MIR);
                 validateWithdrawCost(withdrawCost, ctrl.wavesBalance);
-                if (ctrl.assetBalance.currency === Currency.BTC) {
+                if (ctrl.assetBalance.currency === Currency.LBR) {
                     validateRecipientBTCAddress(ctrl.recipient);
-                } else if (ctrl.assetBalance.currency === Currency.ETH) {
-                    // TODO
                 }
             } catch (e) {
                 notificationService.error(e.message);
@@ -3038,31 +2958,6 @@
             minimumAmount: 0.001
         };
 
-        ctrl.eth = {
-            ethereumAddress: '',
-            minimumAmount: 0.001
-        };
-
-        ctrl.ltc = {
-            litecoinAddress: '',
-            minimumAmount: 0.001
-        };
-
-        ctrl.zec = {
-            zcashAddress: '',
-            minimumAmount: 0.001
-        };
-
-        ctrl.bch = {
-            cashAddress: '',
-            minimumAmount: 0.001
-        };
-
-        ctrl.fiat = {
-            verificationLink: 'https://go.idnow.de/coinomat/userdata/' + applicationContext.account.address,
-            email: 'support@coinomat.com'
-        };
-
         ctrl.refreshBTCUri = function () {
             var params = null;
             if (ctrl.btc.bitcoinAmount >= ctrl.btc.minimumAmount) {
@@ -3079,20 +2974,8 @@
             ctrl.currency = ctrl.assetBalance.currency.displayName;
 
             // Show deposit popups only on mainnet
-            if (ctrl.assetBalance.currency === Currency.BTC && !utilsService.isTestnet()) {
-                depositBTC();
-            } else if (ctrl.assetBalance.currency === Currency.ETH && !utilsService.isTestnet()) {
-                depositETH();
-            } else if (ctrl.assetBalance.currency === Currency.LTC && !utilsService.isTestnet()) {
-                depositLTC();
-            } else if (ctrl.assetBalance.currency === Currency.ZEC && !utilsService.isTestnet()) {
-                depositZEC();
-            } else if (ctrl.assetBalance.currency === Currency.BCH && !utilsService.isTestnet()) {
-                depositBCH();
-            } else if (ctrl.assetBalance.currency === Currency.EUR) {
-                depositEUR();
-            } else if (ctrl.assetBalance.currency === Currency.USD) {
-                depositUSD();
+            if (ctrl.assetBalance.currency === Currency.LBR && !utilsService.isTestnet()) {
+                depositLBR();
             } else {
                 $scope.home.featureUnderDevelopment();
             }
@@ -3106,7 +2989,7 @@
             }
         }
 
-        function depositBTC() {
+        function depositLBR() {
             coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
                 applicationContext.account.address)
                 .then(function (depositDetails) {
@@ -3115,54 +2998,6 @@
                     ctrl.btc.bitcoinUri = bitcoinUriService.generate(ctrl.btc.bitcoinAddress);
                 })
                 .catch(catchErrorMessage);
-        }
-
-        function depositETH() {
-            coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
-                applicationContext.account.address)
-                .then(function (depositDetails) {
-                    dialogService.open('#deposit-eth-dialog');
-                    ctrl.eth.ethereumAddress = depositDetails.address;
-                })
-                .catch(catchErrorMessage);
-        }
-
-        function depositLTC() {
-            coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
-                applicationContext.account.address)
-                .then(function (depositDetails) {
-                    dialogService.open('#deposit-ltc-dialog');
-                    ctrl.ltc.litecoinAddress = depositDetails.address;
-                })
-                .catch(catchErrorMessage);
-        }
-
-        function depositZEC() {
-            coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
-                applicationContext.account.address)
-                .then(function (depositDetails) {
-                    dialogService.open('#deposit-zec-dialog');
-                    ctrl.zec.zcashAddress = depositDetails.address;
-                })
-                .catch(catchErrorMessage);
-        }
-
-        function depositBCH() {
-            coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
-                applicationContext.account.address)
-                .then(function (depositDetails) {
-                    dialogService.open('#deposit-bch-dialog');
-                    ctrl.bch.cashAddress = depositDetails.address;
-                })
-                .catch(catchErrorMessage);
-        }
-
-        function depositEUR() {
-            dialogService.open('#deposit-eur-dialog');
-        }
-
-        function depositUSD() {
-            dialogService.open('#deposit-usd-dialog');
         }
     }
 
