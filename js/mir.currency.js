@@ -17,7 +17,6 @@
 /**
  * @requires {decimal.js}
  */
-
 var Currency = (function () {
 	var currencyCache = {};
 
@@ -54,13 +53,21 @@ var Currency = (function () {
 		verified: true
 	});
 
+	var LBR = new Currency({
+		id: '55WhEqBaGb6Z9DK3bHJQkk4jEDwRejc1xJttyxiykMnL',
+		displayName: 'LBR',
+		shortName: 'LBR',
+		precision: 8,
+		verified: true
+	});
+
 	function isCached(assetId) {
 		return currencyCache.hasOwnProperty(assetId);
 	}
 
 	function invalidateCache() {
 		currencyCache = {};
-
+		currencyCache[LBR.id] = LBR;
 		currencyCache[MIR.id] = MIR;
 	}
 
@@ -81,6 +88,7 @@ var Currency = (function () {
 		},
 		invalidateCache: invalidateCache,
 		isCached: isCached,
+		LBR: LBR,
 		MIR: MIR
 	};
 })();

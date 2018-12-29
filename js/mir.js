@@ -379,7 +379,7 @@
 
     angular
         .module('app.shared')
-        .service('bitcoinUriService', [function () {
+        .service('lbrUriService', [function () {
 
             this.generate = function (address, params) {
 
@@ -387,7 +387,7 @@
                     return '';
                 }
 
-                var uri = 'bitcoin:' + address,
+                var uri = 'lbr:' + address,
                     keys = Object.keys(params || {});
 
                 if (keys.length) {
@@ -2700,7 +2700,7 @@
         var type = $element.data('type');
 
         var minimumFee = new Money(constants.MINIMUM_TRANSACTION_FEE, Currency.MIR);
-        var notPermittedBitcoinAddresses = {};
+        var notPermittedLbrAddresses = {};
 
         ctrl.broadcast = new transactionBroadcast.instance(apiService.assets.transfer,
             function (transaction) {
@@ -2743,7 +2743,7 @@
             },
             messages: {
                 withdrawAddress: {
-                    required: 'Bitcoin address is required'
+                    required: 'Lbr address is required'
                 },
                 withdrawAmount: {
                     required: 'Amount to withdraw is required'
@@ -2797,7 +2797,7 @@
                     var maximumPayment = Money.fromTokens(Math.min(ctrl.assetBalance.toTokens(),
                         response.in_max), ctrl.assetBalance.currency);
                     ctrl.sourceCurrency = ctrl.assetBalance.currency.displayName;
-                    ctrl.isEthereum = (ctrl.assetBalance.currency === Currency.ETH);
+                    ctrl.isEthereum = false;
                     ctrl.exchangeRate = response.xrate;
                     ctrl.feeIn = response.fee_in;
                     ctrl.feeOut = response.fee_out;
@@ -2831,22 +2831,22 @@
                 return coinomatService.getDepositDetails(Currency.LBR, Currency.LBR,
                     applicationContext.account.address);
             }).then(function (depositDetails) {
-                notPermittedBitcoinAddresses[depositDetails.address] = 1;
+                notPermittedLbrAddresses[depositDetails.address] = 1;
 
                 return coinomatService.getDepositDetails(Currency.LBR, Currency.MIR,
                     applicationContext.account.address);
             }).then(function (depositDetails) {
-                notPermittedBitcoinAddresses[depositDetails.address] = 1;
+                notPermittedLbrAddresses[depositDetails.address] = 1;
             });
         }
 
         function validateRecipientBTCAddress(recipient) {
             if (!recipient.match(/^[0-9a-z]{27,34}$/i)) {
-                throw new Error('Bitcoin address is invalid. Expected address length is from 27 to 34 symbols');
+                throw new Error('Lbr address is invalid. Expected address length is from 27 to 34 symbols');
             }
 
-            if (notPermittedBitcoinAddresses[recipient]) {
-                throw new Error('Withdraw on deposit bitcoin accounts is not permitted');
+            if (notPermittedLbrAddresses[recipient]) {
+                throw new Error('Withdraw on deposit lbr accounts is not permitted');
             }
         }
 
@@ -2946,26 +2946,26 @@
     var DEFAULT_ERROR_MESSAGE = 'Connection is lost';
 
     function WavesWalletDepositController($scope, events, coinomatService, dialogService, notificationService,
-                                          applicationContext, bitcoinUriService, utilsService, $element) {
+                                          applicationContext, lbrUriService, utilsService, $element) {
 
         var ctrl = this;
         var currencyId = Currency[$element.data('currency')].id;
 
-        ctrl.btc = {
-            bitcoinAddress: '',
-            bitcoinAmount: '',
-            bitcoinUri: '',
+        ctrl.lbr = {
+            lbrAddress: '',
+            lbrAmount: '',
+            lbrUri: '',
             minimumAmount: 0.001
         };
 
-        ctrl.refreshBTCUri = function () {
+        ctrl.refreshLbrUri = function () {
             var params = null;
-            if (ctrl.btc.bitcoinAmount >= ctrl.btc.minimumAmount) {
+            if (ctrl.lbr.lbrAmount >= ctrl.lbr.minimumAmount) {
                 params = {
-                    amount: ctrl.btc.bitcoinAmount
+                    amount: ctrl.lbr.lbrAmount
                 };
             }
-            ctrl.btc.bitcoinUri = bitcoinUriService.generate(ctrl.btc.bitcoinAddress, params);
+            ctrl.lbr.lbrUri = lbrUriService.generate(ctrl.lbr.lbrAddress, params);
         };
 
         $scope.$on(events.WALLET_DEPOSIT + currencyId, function (event, eventData) {
@@ -2993,9 +2993,9 @@
             coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
                 applicationContext.account.address)
                 .then(function (depositDetails) {
-                    dialogService.open('#deposit-btc-dialog');
-                    ctrl.btc.bitcoinAddress = depositDetails.address;
-                    ctrl.btc.bitcoinUri = bitcoinUriService.generate(ctrl.btc.bitcoinAddress);
+                    dialogService.open('#deposit-lbr-dialog');
+                    ctrl.lbr.lbrAddress = depositDetails.address;
+                    ctrl.lbr.lbrUri = lbrUriService.generate(ctrl.lbr.lbrAddress);
                 })
                 .catch(catchErrorMessage);
         }
@@ -3003,7 +3003,7 @@
 
     WavesWalletDepositController.$inject = [
         '$scope', 'wallet.events', 'coinomatService', 'dialogService', 'notificationService',
-        'applicationContext', 'bitcoinUriService', 'utilsService', '$element'
+        'applicationContext', 'lbrUriService', 'utilsService', '$element'
     ];
 
     angular

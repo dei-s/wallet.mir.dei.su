@@ -1442,6 +1442,8 @@
 				switch (currency.id) {
 					case Currency.MIR.id:
 						return 'MIR';
+					case Currency.LBR.id:
+						return 'LBR';
 				}
 
 				unsupportedCurrency(currency);
@@ -1456,6 +1458,8 @@
 				switch (currency.id) {
 					case Currency.MIR.id:
 						return 'MIR';
+					case Currency.LBR.id:
+						return 'LBR';
 				}
 
 				unsupportedCurrency(currency);
