@@ -5983,7 +5983,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('dex/pair.chart.component',
-    "<img src=\"http://www.ifmr.co.in/blog/wp-content/uploads/2014/04/BitcoinPrice.png\">"
+    "<img src=\"img/BitcoinPrice.png\">"
   );
 
 
