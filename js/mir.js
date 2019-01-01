@@ -2319,6 +2319,10 @@
             image: 'wB-bg-MIR.svg',
             displayName: Currency.MIR.displayName
         };
+        mapping[Currency.LBR.displayName] = {
+            image: 'wB-bg-LBR.svg',
+            displayName: Currency.LBR.displayName
+        };
 
         ctrl.$onChanges = function (changesObject) {
             if (changesObject.balance) {
@@ -2380,6 +2384,10 @@
         ctrl.wallets = [
             {
                 balance: new Money(0, Currency.MIR),
+                depositWith: Currency.LBR
+            },
+            {
+                balance: new Money(0, Currency.LBR),
                 depositWith: Currency.LBR
             }
         ];
@@ -2498,7 +2506,7 @@
         // Assets ID substitution for testnet
         function patchCurrencyIdsForTestnet() {
             if ($scope.isTestnet()) {
-                Currency.LBR.id = 'Fmg13HEHJHuZYbtJq8Da8wifJENq8uBxDuWoP9pVe2Qe';
+                Currency.LBR.id = '55WhEqBaGb6Z9DK3bHJQkk4jEDwRejc1xJttyxiykMnL';
                 Currency.invalidateCache();
             }
         }
@@ -5835,7 +5843,7 @@ function AngularApplicationConfig($provide, $compileProvider, $validatorProvider
             CLIENT_VERSION: '1.0.0', // W0.5.22a
             NODE_ADDRESS: 'https://node.mir.dei.su',
             COINOMAT_ADDRESS: 'https://coinomat.com',
-            MATCHER_ADDRESS: 'http://185.181.164.136:6886',
+            MATCHER_ADDRESS: 'https://m.mir.dei.su',
             DATAFEED_ADDRESS: 'https://marketdata.wavesplatform.com'
         }));
 
